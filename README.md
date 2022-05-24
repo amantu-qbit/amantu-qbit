@@ -1,2 +1,12 @@
 # Read Amantu
-<a href="ko-fi.com/amantu" rel="nofollow"><img src="https://camo.githubusercontent.com/2276bfea246cfdb742ae50205625b3f274ab2d64543de6e7f79932eb8cea2d56/68747470733a2f2f6769746875622d726561646d652d73746174732e76657263656c2e6170702f6170693f757365726e616d653d47687a47617261676526636f756e745f707269766174653d747275652673686f775f69636f6e733d74727565267469746c655f636f6c6f723d64633134336326746578745f636f6c6f723d6666666666662669636f6e5f636f6c6f723d64633134336326686964655f626f726465723d747275652662675f636f6c6f723d323832613336266c61796f75743d636f6d7061637426686964655f7469746c653d66616c736526686964655f72616e6b3d66616c7365" alt="Amantu's GitHub stats" data-canonical-src="https://github-readme-stats.vercel.app/api?username=amantu-qbit" style="max-width: 100%;"></a>
+<a href='https://ko-fi.com/I3I7AH194' target='_blank'><img height='36' style='border:0px;height:36px;' src='https://cdn.ko-fi.com/cdn/kofi3.png?v=3' border='0' alt='Buy Me a Coffee at ko-fi.com' /></a>
+<br>
+# GitHub Stats:
+<a href="ko-fi.com/amantu" rel="nofollow"><img src='https://github-readme-stats.vercel.app/api?username=amantu-qbit&count_private=true&show_icons=true&theme=dark' style='border-radius:7px;'></a>
+
+# Lead Dev:
+1. Reign RP
+2.  Streetz RP
+3.  Nexus RP
+4.  DEV Doodly
+
