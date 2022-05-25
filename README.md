@@ -4,9 +4,9 @@
 # GitHub Stats:
 <a href="ko-fi.com/amantu" rel="nofollow"><img src='https://github-readme-stats.vercel.app/api?username=amantu-qbit&count_private=true&show_icons=true&theme=dark' style='border-radius:7px;'></a>
 
-# Lead Dev:
-1. Reign RP
-2.  Streetz RP
-3.  Nexus RP
-4.  DEV Doodly
+# Dev:
+1. Reign RP (Lead)
+2. Streetz RP (Lead)
+3. Nexus RP (Lead)
+4. Doodly RP (Dev)
 
