@@ -3,7 +3,7 @@
   <br>
   <h1>Languages/Technologies I Know</h1>
   <br>
-  <img src="https://skillicons.dev/icons?i=git,lua,c,cpp,css,vue,discordjs,django,flutter,git,raspberrypi,swift,unreal" />
+  <img src="https://skillicons.dev/icons?i=git,lua,c,cpp,css,vue,discordjs,django,flutter,svelte,raspberrypi,swift,unreal" />
   <br>
     <img src="https://skillicons.dev/icons?i=react,nextjs,github,gitlab,html,java,js,nodejs,nginx,py,tensorflow,ts,arduino" />
   <br>
