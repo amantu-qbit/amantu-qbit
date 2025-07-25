@@ -9,7 +9,7 @@
   <br>
     <img src="https://skillicons.dev/icons?i=react,nextjs,github,gitlab,html,java,js,nodejs,nginx,py,tensorflow,ts,arduino" />
   <br>
-  <a href="https://www.buymeacoffee.com/amantukhan" rel="nofollow"><img src='https://github-readme-stats-git-master-amantuqbits-projects.vercel.app/api/top-langs/?username=amantu-qbit&theme=dark&layout=donut&count_private=true' style='border-radius:7px;'></a>
+  <a href="https://www.buymeacoffee.com/amantukhan" rel="nofollow"><img src='https://github-readme-stats-git-master-amantuqbits-projects.vercel.app/api/top-langs/?username=amantu-qbit&theme=dark&layout=donut&langs_count=10' style='border-radius:7px;'></a>
   <br>
   <h1>🏆 GitHub Trophies</h1>
   <br>
