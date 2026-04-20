@@ -328,12 +328,20 @@ QBCore resource forks, Discord stat bots, NPWD (TypeScript), GTA V audio occlusi
 
 #### Messaging · Payments
 
-<img src="https://go-skill-icons.vercel.app/api/icons?i=whatsapp,meta,tiktok,twilio,stripe,discord,gmail,socketio&theme=dark" />
+<img src="https://cdn.simpleicons.org/whatsapp/25D366" height="42" alt="WhatsApp"/>&nbsp;&nbsp;
+<img src="https://cdn.simpleicons.org/meta/0467DF" height="42" alt="Meta"/>&nbsp;&nbsp;
+<img src="https://cdn.simpleicons.org/tiktok/FFFFFF" height="42" alt="TikTok"/>&nbsp;&nbsp;
+<img src="https://cdn.simpleicons.org/twilio/F22F46" height="42" alt="Twilio"/>&nbsp;&nbsp;
+<img src="https://cdn.simpleicons.org/stripe/635BFF" height="42" alt="Stripe"/>&nbsp;&nbsp;
+<img src="https://cdn.simpleicons.org/discord/5865F2" height="42" alt="Discord"/>&nbsp;&nbsp;
+<img src="https://cdn.simpleicons.org/gmail/EA4335" height="42" alt="Gmail"/>&nbsp;&nbsp;
+<img src="https://cdn.simpleicons.org/socketdotio/FFFFFF" height="42" alt="Socket.io"/>
 
 <br><br>
 
 <img src="https://img.shields.io/badge/WhatsApp%20Cloud-25D366?style=flat-square&logo=whatsapp&logoColor=white"/>
 <img src="https://img.shields.io/badge/Meta%20Graph-0467DF?style=flat-square&logo=meta&logoColor=white"/>
+<img src="https://img.shields.io/badge/TikTok-000000?style=flat-square&logo=tiktok&logoColor=white"/>
 <img src="https://img.shields.io/badge/Twilio-F22F46?style=flat-square&logo=twilio&logoColor=white"/>
 <img src="https://img.shields.io/badge/Stripe-635BFF?style=flat-square&logo=stripe&logoColor=white"/>
 <img src="https://img.shields.io/badge/Webhooks-0088CC?style=flat-square"/>
@@ -389,10 +397,6 @@ QBCore resource forks, Discord stat bots, NPWD (TypeScript), GTA V audio occlusi
 <br><br>
 
 <img src="https://github-readme-activity-graph.vercel.app/graph?username=amantu-qbit&bg_color=0d1117&color=00e5ff&line=00e5ff&point=ffffff&area=true&area_color=00e5ff&hide_border=true" width="95%" alt="activity"/>
-
-<br><br>
-
-<img src="https://github-profile-trophy.vercel.app/?username=amantu-qbit&theme=tokyonight&column=7&margin-w=10&margin-h=10&no-bg=true&no-frame=true" alt="trophies"/>
 
 </div>
 
