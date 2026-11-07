@@ -26,7 +26,10 @@ def boot_ci(x, n=5000):
 
 
 NAMES = {"deepseek/deepseek-v4-flash": "DeepSeek V4 Flash", "deepseek/deepseek-v4-pro": "DeepSeek V4 Pro",
-         "google/gemma-4-31b-it": "Gemma 4 31B", "qwen/qwen3.7-plus": "Qwen3.7 Plus"}
+         "google/gemma-4-31b-it": "Gemma 4 31B", "qwen/qwen3.7-plus": "Qwen3.7 Plus",
+         "anthropic/claude-haiku-5.5": "Claude Haiku 5.5", "anthropic/claude-sonnet-5.5": "Claude Sonnet 5.5",
+         "google/gemini-3.8-flash": "Gemini 3.8 Flash", "openai/gpt-5.6-luna": "GPT-5.6 Luna"}
+DIGIT_ONLY = {"anthropic/claude-haiku-5.5", "anthropic/claude-sonnet-5.5", "google/gemini-3.8-flash", "openai/gpt-5.6-luna"}
 
 
 def short(m):
@@ -61,8 +64,10 @@ lines = ["| Grader | Prompt | ρ vs human | Δ +25% filler | Δ +50% | Δ +100% 
          "|---|---|---|---|---|---|---|---|---|"]
 for r in summary["graders"]:
     f = lambda k: f"{r[k]['delta']:+.2f} [{r[k]['ci95'][0]:+.2f}, {r[k]['ci95'][1]:+.2f}]"
-    lines.append(f"| {short(r['model'])} | {r['prompt'].replace('_', '-')} | {r['validity_spearman_vs_human']:.2f} | "
+    lines.append(f"| {short(r['model'])}{' †' if r['model'] in DIGIT_ONLY else ''} | {r['prompt'].replace('_', '-')} | {r['validity_spearman_vs_human']:.2f} | "
                  f"{f('pad25')} | {f('pad50')} | {f('pad100')} | {r['pad100']['share_up']:.0%} | {f('repeat100') if 'repeat100' in r else 'n/a'} | {f('truncated')} |")
+lines.append("\n† No log-probs available: score is the digit the model replies with at temperature 0, so per-essay "
+             "scores are whole numbers and the means are noisier.")
 (R / "summary.md").write_text("\n".join(lines) + "\n")
 
 # Figure: (A) grader quality vs. what padding does to its grade, (B) dose-response for two graders.

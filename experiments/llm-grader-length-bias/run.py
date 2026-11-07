@@ -138,11 +138,17 @@ class APIGrader:
     """
     URL = "https://openrouter.ai/api/v1/chat/completions"
     TOP = {"qwen/qwen3.7-plus": 5}  # provider caps top_logprobs at 5
+    # Frontier models that expose no log-probs: read the digit they reply with at temperature 0.
+    # The ones that cannot switch reasoning off run at minimal effort.
+    DIGIT = {"anthropic/claude-haiku-5.5": {"enabled": False}, "openai/gpt-5.6-luna": {"enabled": False},
+             "anthropic/claude-sonnet-5.5": {"effort": "minimal"}, "google/gemini-3.8-flash": {"effort": "minimal"}}
 
     def __init__(self, name):
         self.name, self.key = name, os.environ.get("OPENROUTER_API_KEY", "")
 
     def score(self, system, essay):
+        if self.name in self.DIGIT:
+            return self.score_digit(system, essay)
         body = {"model": self.name, "temperature": 0, "max_tokens": 1, "logprobs": True,
                 "top_logprobs": self.TOP.get(self.name, 20), "reasoning": {"enabled": False},
                 "provider": {"require_parameters": True},
@@ -165,6 +171,26 @@ class APIGrader:
                 ev = sum((i + 1) * q for i, q in enumerate(p)) / mass
                 return ev, p.index(max(p)) + 1, mass, r.get("provider", "")
             except Exception as e:  # rate limits and transient provider errors
+                if attempt == 5:
+                    raise
+                time.sleep(2 ** attempt)
+
+    def score_digit(self, system, essay):
+        body = {"model": self.name, "temperature": 0, "max_tokens": 400, "reasoning": self.DIGIT[self.name],
+                "messages": [{"role": "system", "content": system},
+                             {"role": "user", "content": f"Essay:\n\"\"\"\n{essay}\n\"\"\"\n\n"
+                              "Reply with the score only, as a single digit from 1 to 6."}]}
+        for attempt in range(6):
+            try:
+                req = urllib.request.Request(self.URL, json.dumps(body).encode(), {
+                    "Authorization": f"Bearer {self.key}", "Content-Type": "application/json"})
+                r = json.load(urllib.request.urlopen(req, timeout=180))
+                found = re.search(r"[1-6]", r["choices"][0]["message"].get("content") or "")
+                if not found:
+                    raise ValueError(f"no score in reply: {r['choices'][0]['message']}")
+                v = int(found.group())
+                return float(v), v, 1.0, r.get("provider", "")
+            except Exception as e:
                 if attempt == 5:
                     raise
                 time.sleep(2 ** attempt)
