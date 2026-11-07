@@ -1,0 +1,27 @@
+{
+ "dataset": [
+  "tasksource/AES2-essay-scoring",
+  "663439c1ae103e912ff7d01c503a8429ea1cbc03"
+ ],
+ "n": 120,
+ "seed": 0,
+ "local_models": [
+  "Qwen/Qwen2.5-0.5B-Instruct",
+  "Qwen/Qwen2.5-1.5B-Instruct"
+ ],
+ "api_models_logprobs": [
+  "deepseek/deepseek-v4-flash",
+  "google/gemma-4-31b-it",
+  "qwen/qwen3.7-plus",
+  "deepseek/deepseek-v4-pro"
+ ],
+ "api_models_digit": [
+  "anthropic/claude-haiku-5.5",
+  "openai/gpt-5.6-luna",
+  "google/gemini-3.8-flash",
+  "anthropic/claude-sonnet-5.5"
+ ],
+ "run_date": "2026-11-07",
+ "torch": "2.15.0+cpu",
+ "transformers": "5.22.2"
+}

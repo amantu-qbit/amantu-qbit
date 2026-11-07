@@ -77,18 +77,25 @@ plt.rcParams.update({"font.family": "DejaVu Sans", "font.size": 10, "axes.edgeco
 fig, (a, b) = plt.subplots(1, 2, figsize=(12.5, 5.2), gridspec_kw={"width_ratios": [1.1, 1]})
 style = {True: (COLORS[0], "o", "open model, run locally on CPU"), False: (COLORS[1], "s", "hosted model, via OpenRouter")}
 by = {(r["model"], r["prompt"]): r for r in summary["graders"]}
+LABEL_RIGHT = {"google/gemma-4-31b-it", "google/gemini-3.8-flash", "Qwen/Qwen2.5-0.5B-Instruct",
+               "Qwen/Qwen2.5-1.5B-Instruct"}
 for m in models:
     r = by[(m, "standard")]
     col, mk, _ = style[m in LOCAL]
     x, y = r["validity_spearman_vs_human"], r["pad100"]["delta"]
     lo, hi = r["pad100"]["ci95"]
+    hollow = m in DIGIT_ONLY
     a.errorbar(x, y, yerr=[[y - lo], [hi - y]], fmt=mk, ms=9, color=col, ecolor=col, elinewidth=1.5,
-               markeredgecolor=SURF, markeredgewidth=1.5, zorder=3)
-    right = x > 0.6
-    a.annotate(short(m), (x, y), xytext=(-9 if right else 9, 4), textcoords="offset points", fontsize=9,
-               color=INK, ha="right" if right else "left")
+               markerfacecolor=SURF if hollow else col, markeredgecolor=col if hollow else SURF,
+               markeredgewidth=2 if hollow else 1.5, zorder=3)
+    right = m in LABEL_RIGHT
+    a.annotate(short(m) + (" †" if hollow else ""), (x, y), xytext=(10 if right else -10, 0),
+               textcoords="offset points", fontsize=9, color=INK, va="center", ha="left" if right else "right")
 for loc, (col, mk, lab) in style.items():
     a.plot([], [], mk, color=col, ms=8, label=lab)
+a.plot([], [], "s", color=COLORS[1], markerfacecolor=SURF, markeredgewidth=2, ms=8,
+       label="† hosted, no log-probs: temperature-0 digit reply")
+a.set_xlim(0.1, 1.02)
 a.axhline(0, color=INK2, lw=1)
 a.set_xlabel("Grader agreement with human scores (Spearman ρ, original essays)")
 a.set_ylabel("Grade change when filler doubles the essay (1–6 scale)")
@@ -121,7 +128,7 @@ b.legend(frameon=False, fontsize=8, loc="lower left")
 n = summary["n_essays"]
 fig.text(0.01, 0.012, f"{n} essays from the public AES 2.0 corpus (tasksource/AES2-essay-scoring), 20 per human score 1–6. "
          "Paired design: each essay graded as written and with generic filler sentences inserted.\n"
-         "Score = expected value of the grader's next-token distribution over 1–6. Error bars / bands: 95% bootstrap CI.",
+         "Score = expected value of the grader's next-token distribution over 1–6 († graders: the digit replied at temperature 0). Error bars / bands: 95% bootstrap CI.",
          fontsize=7.5, color=INK2)
 fig.tight_layout(rect=(0, 0.06, 1, 1))
 fig.savefig(HERE / "figure.png", dpi=200)
