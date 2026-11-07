@@ -105,6 +105,23 @@ Dockerized, self-hosted. CI/CD, observability, backups on day one.
 <img src="https://capsule-render.vercel.app/api?type=rect&color=gradient&customColorList=0,2,2,5,30&height=3" width="100%" alt=""/>
 
 <!-- ═══════════════════════════════════════════════════════════════════════ -->
+<!--                           RESEARCH                                       -->
+<!-- ═══════════════════════════════════════════════════════════════════════ -->
+
+## 🔬 &nbsp;Research
+
+#### [Do LLM essay graders pay for words that say nothing?](experiments/llm-grader-length-bias)
+**A reproducible LLM-as-a-judge length-bias experiment · 11 graders · 15,840 grades**
+
+I padded 120 public, human-scored essays with sentences that add no content, then had each grader score both versions. Small graders **raise** the grade for padding. Claude, GPT, Gemini, DeepSeek and others **lower** it by 0.7–1.4 points, which is 2–9× what they take off for deleting 40% of the essay's argument. Telling the grader to ignore length barely helps.
+
+<a href="experiments/llm-grader-length-bias"><img src="experiments/llm-grader-length-bias/figure.png" width="100%" alt="Grade change from content-free padding against each grader's agreement with human scores"/></a>
+
+<sub><img src="https://img.shields.io/badge/LLM--as--a--judge-00E5FF?style=flat-square"> <img src="https://img.shields.io/badge/Reward%20hacking-00E5FF?style=flat-square"> <img src="https://img.shields.io/badge/PyTorch-EE4C2C?style=flat-square&logo=pytorch&logoColor=white"> <img src="https://img.shields.io/badge/Hugging%20Face-FFD21E?style=flat-square&logo=huggingface&logoColor=black"></sub>
+
+<img src="https://capsule-render.vercel.app/api?type=rect&color=gradient&customColorList=0,2,2,5,30&height=3" width="100%" alt=""/>
+
+<!-- ═══════════════════════════════════════════════════════════════════════ -->
 <!--                           SELECTED WORK                                  -->
 <!-- ═══════════════════════════════════════════════════════════════════════ -->
 
