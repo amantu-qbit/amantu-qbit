@@ -11,7 +11,8 @@ grader's next-token distribution over "1".."6" (no sampling).
 
     python run.py --models Qwen/Qwen2.5-0.5B-Instruct Qwen/Qwen2.5-1.5B-Instruct --n 120
 """
-import argparse, json, random, re, time
+import argparse, json, math, os, random, re, time, urllib.request
+from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 
 import pandas as pd
@@ -129,9 +130,51 @@ class Grader:
         return float((p * torch.arange(1, 7)).sum()), int(p.argmax()) + 1, float(torch.softmax(logits, -1)[self.ids].sum())
 
 
+class APIGrader:
+    """Same measurement through OpenRouter: one output token, expected value over the digit log-probs.
+
+    Hosted models cannot be prefilled with "Score: ", so the instruction asks for a single digit.
+    Reasoning is disabled so the first token is the score. Set OPENROUTER_API_KEY.
+    """
+    URL = "https://openrouter.ai/api/v1/chat/completions"
+    TOP = {"qwen/qwen3.7-plus": 5}  # provider caps top_logprobs at 5
+
+    def __init__(self, name):
+        self.name, self.key = name, os.environ.get("OPENROUTER_API_KEY", "")
+
+    def score(self, system, essay):
+        body = {"model": self.name, "temperature": 0, "max_tokens": 1, "logprobs": True,
+                "top_logprobs": self.TOP.get(self.name, 20), "reasoning": {"enabled": False},
+                "provider": {"require_parameters": True},
+                "messages": [{"role": "system", "content": system},
+                             {"role": "user", "content": f"Essay:\n\"\"\"\n{essay}\n\"\"\"\n\n"
+                              "Reply with the score only, as a single digit from 1 to 6."}]}
+        for attempt in range(6):
+            try:
+                req = urllib.request.Request(self.URL, json.dumps(body).encode(), {
+                    "Authorization": f"Bearer {self.key}", "Content-Type": "application/json"})
+                r = json.load(urllib.request.urlopen(req, timeout=120))
+                top = r["choices"][0]["logprobs"]["content"][0]["top_logprobs"]
+                p = [0.0] * 6
+                for t in top:
+                    if t["token"].strip() in list("123456"):
+                        p[int(t["token"].strip()) - 1] += math.exp(t["logprob"])
+                mass = sum(p)
+                if mass == 0:
+                    raise ValueError(f"no digit in top tokens: {top}")
+                ev = sum((i + 1) * q for i, q in enumerate(p)) / mass
+                return ev, p.index(max(p)) + 1, mass, r.get("provider", "")
+            except Exception as e:  # rate limits and transient provider errors
+                if attempt == 5:
+                    raise
+                time.sleep(2 ** attempt)
+
+
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--models", nargs="+", default=["Qwen/Qwen2.5-0.5B-Instruct", "Qwen/Qwen2.5-1.5B-Instruct"])
+    ap.add_argument("--models", nargs="*", default=["Qwen/Qwen2.5-0.5B-Instruct", "Qwen/Qwen2.5-1.5B-Instruct"])
+    ap.add_argument("--api-models", nargs="*", default=[], help="OpenRouter model ids")
+    ap.add_argument("--workers", type=int, default=8)
     ap.add_argument("--n", type=int, default=120)
     ap.add_argument("--seed", type=int, default=0)
     ap.add_argument("--out", default="results/scores.csv")
@@ -166,7 +209,25 @@ def main():
                 print(f"{m} {i+1}/{len(essays)} {time.time()-t0:.0f}s", flush=True)
         pd.DataFrame(rows).to_csv(out, index=False)
         del g
-    json.dump({"dataset": DATASET, "n": a.n, "seed": a.seed, "models": a.models,
+    for m in a.api_models:
+        g = APIGrader(m)
+        jobs = [(r, pname, system, c, text) for _, r in essays.iterrows() for pname, system in PROMPTS.items()
+                for c, text in conds[r.essay_id].items() if (m, pname, r.essay_id, c) not in seen]
+
+        def one(j):
+            r, pname, system, c, text = j
+            ev, am, mass, prov = g.score(system, text)
+            return dict(model=m, prompt=pname, essay_id=r.essay_id, human=int(r.score), condition=c,
+                        words=len(text.split()), score=ev, argmax=am, digit_mass=mass, provider=prov)
+        t0 = time.time()
+        with ThreadPoolExecutor(a.workers) as ex:
+            for i, row in enumerate(ex.map(one, jobs)):
+                rows.append(row)
+                if (i + 1) % 200 == 0:
+                    pd.DataFrame(rows).to_csv(out, index=False)
+                    print(f"{m} {i+1}/{len(jobs)} {time.time()-t0:.0f}s", flush=True)
+        pd.DataFrame(rows).to_csv(out, index=False)
+    json.dump({"dataset": DATASET, "n": a.n, "seed": a.seed, "models": a.models, "api_models": a.api_models,
                "torch": torch.__version__}, open(out.parent / "run_config.json", "w"), indent=1)
 
 
